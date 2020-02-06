@@ -6,5 +6,5 @@ manage.py manages the updates for HazPy and the UI for all the tools! Pretty coo
 
 ## To use
 
-git submodule add -b master https://github.com/nhrap-dev/manage.git
-git config --global submodule.recurse true
+- git submodule add -b master https://github.com/nhrap-dev/manage.git
+- git config --global submodule.recurse true
