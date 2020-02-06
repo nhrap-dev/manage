@@ -1,8 +1,7 @@
 from subprocess import check_output, check_call, call
-import time
 import os
 import ctypes
-import sys
+# import sys
 import requests
 import pkg_resources
 import json
