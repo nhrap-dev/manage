@@ -1,5 +1,4 @@
 from subprocess import check_output, check_call, call
-import numpy
 import os
 import ctypes
 import sys
