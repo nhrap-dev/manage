@@ -10,5 +10,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run a multi-line script
         run: |
+          git remote rename origin upstream
           git remote add origin https://github.com/nhrap-dev/test-tool.git
-          git push --all origin
+          git push origin master
