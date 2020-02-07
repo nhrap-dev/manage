@@ -4,11 +4,13 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Run a multi-line script
-      run: |
-        git clone https://github.com/nhrap-dev/manage.git https://github.com/nhrap-dev/test-tool
+      - uses: actions/checkout@v2
+      - name: Run a multi-line script
+        run: |
+          git clone https://github.com/nhrap-dev/manage.git https://github.com/nhrap-dev/test-tool
+          git remote add https://github.com/nhrap-dev/test-tool.git
+          git commit -m "manage update"
+          git push master
