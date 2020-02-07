@@ -1,4 +1,4 @@
-# manage
+# manage.py
 
 ## This is a submodule for Hazus Open-Source Tools
 
