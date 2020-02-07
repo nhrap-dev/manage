@@ -13,4 +13,7 @@ jobs:
       run: echo Hello, world!
     - name: Run a multi-line script
       run: |
-        git clone https://github.com/nhrap-dev/manage.git https://github.com/nhrap-dev/test-tool.git
+        git clone https://github.com/nhrap-dev/test-tool https://github.com/nhrap-dev/manage.git
+        git add -A
+        git commit -m "auto push"
+        git push
