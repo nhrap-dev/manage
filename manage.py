@@ -1,4 +1,4 @@
-from subprocess import check_output, check_call, call
+from subprocess import check_output, check_call, call, Popen
 import os
 import ctypes
 import sys
@@ -50,8 +50,9 @@ def condaInstallHazus():
             except:
                 setProxies()
                 call('echo y | conda create -y -n hazus_env', shell=True)
-        print('Installing the hazus python package')
         try:
+            print('Installing the hazus python package')
+            messageBox(0,"Hazus will be installed silently in the minimized Python prompt. Feel free to continue whatever you're doing. We will let you know when it's complete.","Hazus", 0x1000)
             try:
                 check_call('conda activate hazus_env && echo y | conda install -c nhrap hazus', shell=True)
             except:
@@ -62,7 +63,6 @@ def condaInstallHazus():
                 check_call('conda activate hazus_env && echo y | conda install -c nhrap hazus', shell=True)
             except:
                 check_call('activate hazus_env && echo y | conda install -c nhrap hazus', shell=True)
-            
         messageBox(0,"The Hazus Python package was successfully installed!","Hazus", 0x1000)
     except:
         messageBox(0, 'Unable to install the hazus python package. If this error persists, contact hazus-support@riskmapcds.com for assistance.',"Hazus", 0x1000)
@@ -87,12 +87,12 @@ def installHazus():
         except:
             messageBox(0,"An error occured. The Hazus Python package was not installed. Please check your network settings and try again.","Hazus", 0x1000)
 
-def update():
-    messageBox = ctypes.windll.user32.MessageBoxW
-    returnValue = messageBox(None,"A newer version of the Hazus Python package was found. Would you like to install it now?","Hazus",0x1000 | 0x4)
-    if returnValue == 6:
-        print('Conda is installing hazus')
-        condaInstallHazus()
+# def update():
+#     messageBox = ctypes.windll.user32.MessageBoxW
+#     returnValue = messageBox(None,"A newer version of the Hazus Python package was found. Would you like to install it now?","Hazus",0x1000 | 0x4)
+#     if returnValue == 6:
+#         print('Conda is installing hazus')
+#         condaInstallHazus()
 
 def checkForHazusUpdates():
     messageBox = ctypes.windll.user32.MessageBoxW
@@ -108,8 +108,8 @@ def checkForHazusUpdates():
         if newestVersion != installedVersion:
             returnValue = messageBox(None,"A newer version of the Hazus Python package was found. Would you like to install it now?","Hazus",0x1000 | 0x4)
             if returnValue == 6:
-                print('updating hazus')
-                update()
+                # print('updating hazus')
+                condaInstallHazus()
         else:
             print('Hazus is up to date')
     except:
