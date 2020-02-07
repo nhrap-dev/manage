@@ -2,7 +2,7 @@
 
 ## This is a submodule for Hazus Open-Source Tools
 
-manage handles all the updates for HazPy and the GUI for all the tools! Pretty cool hunh?
+`manage.py` handles all the updates for HazPy and the GUI for all the tools! Pretty cool hunh?
 
 ## To use
 
@@ -30,13 +30,14 @@ manage handles all the updates for HazPy and the GUI for all the tools! Pretty c
 
     ```
 
-4.  Replace the URLs with the URLs for your tool
+4.  Replace the URLs with the URLs for your tool:
 
-    - hazusInitUrl: This can stay the same. It's the raw URL to the **init**.py file in the hazus python package root.
-    - repoZipfileUrl: This is the URL to the zipfile download for your tool. You can access this URL by going to your repo, clicking on Clone or Download, and then right clicking on Download Zip and copying the URL.
-    - toolInitUrl: This is the URL to the **init**.py file in the root of your tool. You can access it by clicking on your **init**.py file, then clicking Raw at the top of your code.
+    - **release:** This alternates between the URLs for prod and dev. Update to prod for production.
+    - **hazusInitUrl:** This can stay the same. It's the raw URL to the `__init__.py` file in the hazus python package root.
+    - **repoZipfileUrl:** This is the URL to the zipfile download for your tool. You can access this URL by going to your repo, clicking on Clone or Download, and then right clicking on Download Zip and copying the URL.
+    - **toolInitUrl:** This is the URL to the `__init__.py` file in the root of your tool. You can access it by clicking on your `__init__.py` file, then clicking Raw at the top of your code.
 
-5.  Create an **init**.py file in the src folder, so that the manage submodule can be seen by your app. Put this code inside of it:
+5.  Create an `__init__.py` file in the src folder, so that the manage submodule can be seen by your app. Put this code inside of it:
 
     ```
     __version__ = '0.0.1'
@@ -45,7 +46,7 @@ manage handles all the updates for HazPy and the GUI for all the tools! Pretty c
     from .manage import manage
     ```
 
-6.  Update your run.py file that is called by the .bat entry point.
+6.  Update your run.py file that is called by the .bat entry point:
 
     If your GUI is in the src folder, you can call
 
