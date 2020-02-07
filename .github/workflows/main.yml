@@ -9,11 +9,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: echo Hello, world!
     - name: Run a multi-line script
       run: |
-        git clone https://github.com/nhrap-dev/test-tool https://github.com/nhrap-dev/manage.git
-        git add -A
+        git clone https://github.com/nhrap-dev/manage.git https://github.com/nhrap-dev/test-tool.git
+        git add https://github.com/nhrap-dev/test-tool.git
         git commit -m "auto push"
-        git push
+        git push https://github.com/nhrap-dev/test-tool.git master
