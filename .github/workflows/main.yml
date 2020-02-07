@@ -14,5 +14,6 @@ jobs:
           git config --global user.name "lorax521"
           git clone https://github.com/nhrap-dev/manage.git https://github.com/nhrap-dev/test-tool
           git remote add github "https://github.com/nhrap-dev/test-tool.git"
+          git add -A
           git commit -m "manage update"
           git push master
