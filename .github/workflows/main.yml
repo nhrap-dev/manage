@@ -16,4 +16,4 @@ jobs:
           git remote add github "https://github.com/nhrap-dev/test-tool.git"
           git add -A
           git commit -m "manage update"
-          git push master
+          git push
