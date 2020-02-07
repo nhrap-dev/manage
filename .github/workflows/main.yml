@@ -11,7 +11,4 @@ jobs:
     - uses: actions/checkout@v2
     - name: Run a multi-line script
       run: |
-        git clone https://github.com/nhrap-dev/manage.git https://github.com/nhrap-dev/test-tool.git
-        git add https://github.com/nhrap-dev/test-tool.git
-        git commit -m "auto push"
-        git push https://github.com/nhrap-dev/test-tool.git master
+        git clone https://github.com/nhrap-dev/manage.git https://github.com/nhrap-dev/test-tool
