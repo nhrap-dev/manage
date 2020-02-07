@@ -13,63 +13,71 @@ except:
     with open('./config.json') as configFile:
         config = json.load(configFile)
 
-
+# environmental variables
 release = config['release']
+proxy = config['proxies']['fema']
+hazus_version_url = config[release]['hazusInitUrl']
+tool_version_url = config[release]['toolInitUrl']
+tool_zipfile_url = config[release]['repoZipfileUrl']
+conda_env = 'hazus_env'
+conda_channel = 'nhrap'
+python_package = 'hazus'
 
 def createProxyEnv():
     newEnv = os.environ.copy()
-    newEnv["HTTP_PROXY"] = config['proxies']['fema']
-    newEnv["HTTPS_PROXY"] = config['proxies']['fema']
+    newEnv["HTTP_PROXY"] = proxy
+    newEnv["HTTPS_PROXY"] = proxy
     return newEnv
 
 def setProxies():
-    call('set HTTP_PROXY=' + config['proxies']['fema'], shell=True)
-    call('set HTTPS_PROXY=' + config['proxies']['fema'], shell=True)
-    os.environ["HTTP_PROXY"] = config['proxies']['fema']
-    os.environ["HTTPS_PROXY"] = config['proxies']['fema']
+    call('set HTTP_PROXY=' + proxy, shell=True)
+    call('set HTTPS_PROXY=' + proxy, shell=True)
+    os.environ["HTTP_PROXY"] = proxy
+    os.environ["HTTPS_PROXY"] = proxy
 
 def activateEnv():
     try:
         try:
-            check_call('conda activate hazus_env', shell=True)
+            check_call('conda activate ' + conda_env, shell=True)
         except:
-            check_call('activate hazus_env', shell=True)
+            check_call('activate ' + conda_env, shell=True)
     except:
-        print("Can't activate hazus_env")
+        print("Can't activate " + conda_env)
 
 def condaInstallHazus():
     messageBox = ctypes.windll.user32.MessageBoxW
-    print('Checking for the conda environment hazus_env')
+    print('Checking for the conda environment '+ conda_env)
     try:
         try:
-            check_call('conda activate hazus_env', shell=True)
+            check_call('conda activate ' + conda_env, shell=True)
         except:
-            print('Creating the conda hazus_env')
+            print('Creating the conda ' + conda_env)
             try:
-                call('echo y | conda create -y -n hazus_env', shell=True)
+                call('echo y | conda create -y -n ' + conda_env, shell=True)
             except:
                 setProxies()
-                call('echo y | conda create -y -n hazus_env', shell=True)
+                call('echo y | conda create -y -n ' + conda_env, shell=True)
         try:
-            print('Installing the hazus python package')
-            messageBox(0,"Hazus will be installed silently in the minimized Python prompt. Feel free to continue whatever you're doing. We will let you know when it's complete.","Hazus", 0x1000)
+            print('Installing ' + python_package)
+            # TODO replace this message box with a cmd that brings the terminal to the foreground
+            messageBox(0, python_package + " will be installed silently in the minimized Python prompt. Feel free to continue whatever you're doing. We will let you know when it's complete.","Hazus", 0x1000)
             try:
-                check_call('conda activate hazus_env && echo y | conda install -c nhrap hazus', shell=True)
+                check_call('conda activate ' + conda_env + ' && echo y | conda install ' + python_package, shell=True)
             except:
-                check_call('activate hazus_env && echo y | conda install -c nhrap hazus', shell=True)
+                check_call('activate ' + conda_env + ' && echo y | conda install ' + python_package, shell=True)
         except:
             setProxies()
             try:
-                check_call('conda activate hazus_env && echo y | conda install -c nhrap hazus', shell=True)
+                check_call('conda activate ' + conda_env + ' && echo y | conda install ' + python_package, shell=True)
             except:
-                check_call('activate hazus_env && echo y | conda install -c nhrap hazus', shell=True)
-        messageBox(0,"The Hazus Python package was successfully installed!","Hazus", 0x1000)
+                check_call('activate ' +conda_env+ ' && echo y | conda install ' + python_package, shell=True)
+        messageBox(0, python_package + " was successfully installed!","Hazus", 0x1000)
     except:
-        messageBox(0, 'Unable to install the hazus python package. If this error persists, contact hazus-support@riskmapcds.com for assistance.',"Hazus", 0x1000)
+        messageBox(0, 'Unable to install ' + python_package + '. If this error persists, contact hazus-support@riskmapcds.com for assistance.',"Hazus", 0x1000)
 
 def installHazus():
     messageBox = ctypes.windll.user32.MessageBoxW
-    returnValue = messageBox(None,"The Hazus Python package is required to run this tool. Would you like to install it now?","Hazus",0x1000 | 0x4)
+    returnValue = messageBox(None, python_package + " is required to run this tool. Would you like to install it now?","Hazus",0x1000 | 0x4)
     if returnValue == 6:
         output = check_output('conda config --show channels')
         channels = list(map(lambda x: x.strip(), str(output).replace('\\r\\n', '').split('-')))[1:]
@@ -79,13 +87,16 @@ def installHazus():
         if not 'conda' in channels and not 'forge' in channels:
             call('conda config --add channels conda-forge')
             print('conda-forge channel added')
+        if not conda_channel in channels:
+            call('conda config --add channels ' + conda_channel)
+            print(conda_channel + ' channel added')
         ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 1)
-        print("Installing the Hazus Python package - hold your horses, this could take a few minutes... but it's totally worth it")
+        print("Installing " + python_package + " - hold your horses, this could take a few minutes... but it's totally worth it")
         try:
-            print('Conda is installing hazus')
+            print('Conda is installing ' + python_package)
             condaInstallHazus()
         except:
-            messageBox(0,"An error occured. The Hazus Python package was not installed. Please check your network settings and try again.","Hazus", 0x1000)
+            messageBox(0,"An error occured. " + python_package + " was not installed. Please check your network settings and try again.","Hazus", 0x1000)
 
 # def update():
 #     messageBox = ctypes.windll.user32.MessageBoxW
@@ -97,21 +108,19 @@ def installHazus():
 def checkForHazusUpdates():
     messageBox = ctypes.windll.user32.MessageBoxW
     try:
-        pkg_resources.get_distribution('hazus')
-        installedVersion = pkg_resources.get_distribution('hazus').version
+        installedVersion = pkg_resources.get_distribution(python_package).version
         try:
-            req = requests.get(config[release]['hazusInitUrl'], timeout=0.5)
+            req = requests.get(hazus_version_url, timeout=0.5)
         except:
             setProxies()
-            req = requests.get(config[release]['hazusInitUrl'], timeout=0.5)
+            req = requests.get(hazus_version_url, timeout=0.5)
         newestVersion = parseVersionFromInit(req.text)
         if newestVersion != installedVersion:
-            returnValue = messageBox(None,"A newer version of the Hazus Python package was found. Would you like to install it now?","Hazus",0x1000 | 0x4)
+            returnValue = messageBox(None,"A newer version of " + python_package + " was found. Would you like to install it now?","Hazus",0x1000 | 0x4)
             if returnValue == 6:
-                # print('updating hazus')
                 condaInstallHazus()
         else:
-            print('Hazus is up to date')
+            print(python_package + ' is up to date')
     except:
         installHazus()
 
@@ -123,10 +132,10 @@ def checkForToolUpdates():
             textBlob = ''.join(text)
             installedVersion = parseVersionFromInit(textBlob)
         try:
-            req = requests.get(config[release]['toolInitUrl'], timeout=0.5)
+            req = requests.get(tool_version_url, timeout=0.5)
         except:
             setProxies()
-            req = requests.get(config[release]['toolInitUrl'], timeout=0.5)
+            req = requests.get(tool_version_url, timeout=0.5)
         newestVersion = parseVersionFromInit(req.text)
         if newestVersion != installedVersion:
             returnValue = messageBox(None,"A newer version of the tool was found. Would you like to install it now?","Hazus",0x1000 | 0x4)
@@ -146,10 +155,10 @@ def updateTool():
         from io import BytesIO
         from zipfile import ZipFile
         try:
-            r = requests.get(config[release]['repoZipfileUrl'])
+            r = requests.get(tool_zipfile_url)
         except:
             setProxies()
-            r = requests.get(config[release]['repoZipfileUrl'])
+            r = requests.get(tool_zipfile_url)
         z = ZipFile(BytesIO(r.content))
         z.extractall()
         fromDirectory  = z.namelist()[0]
