@@ -12,4 +12,5 @@ jobs:
         run: |
           ls
           cd ..
+          cd ..
           ls
