@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run a multi-line script
         run: |
-          cd test-tool
+          cd ../test-tool
           git remote add github "https://github.com/nhrap-dev/manage.git"
           git add -A
           git commit -m "manage update"
