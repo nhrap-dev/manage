@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run a multi-line script
         run: |
-          git clone https://github.com/nhrap-dev/test-tool.git
+          git clone git+ssh://git@github.com:nhrap-dev/test-tool.git
           cp ./manage.py ./test-tool/manage.py
           cd test-tool
           git add .
