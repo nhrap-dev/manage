@@ -11,7 +11,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           ssh-add ~/.ssh/manage.py
-          git clone passphrase:git@github.com:nhrap-dev/test-tool.git
+          git clone git@github.com:nhrap-dev/test-tool.git
           cp ./manage.py ./test-tool/manage.py
           cd test-tool
           git add .
