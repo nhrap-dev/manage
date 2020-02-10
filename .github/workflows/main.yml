@@ -17,6 +17,7 @@ jobs:
           cd test-tool
           git add .
           git commit -m "update manage.py"
+          git remote set-url origin git@github.com:lorax521/nhrap-dev/manage.git
           git push origin master
           cd ..
           rm -rf test-tool
