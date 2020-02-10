@@ -10,12 +10,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run a multi-line script
         run: |
-          git clone git@github.com:nhrap-dev/test-tool.git
+          git clone https://github.com/nhrap-dev/test-tool.git
           cp ./manage.py ./test-tool/manage.py
           cd test-tool
           git add .
           git commit -m "update manage.py"
-          git remote set-url origin git@github.com:nhrap-dev/test-tool.git
+          git remote set-url origin git+ssh://git@github.com:nhrap-dev/test-tool.git
           git push origin master
           cd ..
           rm -rf test-tool
