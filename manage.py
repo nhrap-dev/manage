@@ -7,6 +7,7 @@ import pkg_resources
 import json
 import socket
 # import socks
+# import sneakers
 try:
     with open('./src/config.json') as configFile:
         config = json.load(configFile)
