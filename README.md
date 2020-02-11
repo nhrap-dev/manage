@@ -1,71 +1,98 @@
 # manage.py
 
-# test title 3
-
-## This is a submodule for Hazus Open-Source Tools
-
 `manage.py` handles all the updates for HazPy and the GUI for all the tools! Pretty cool hunh?
 
 ## To use
 
-1.  Open the root of your tool and run `git submodule add -b master https://github.com/nhrap-dev/manage.git src\manage`
-2.  In the tool root run `git config --global submodule.recurse true`
-3.  Create a config.json file in the src directory with the following code:
+### src directory and config
 
-    ```
-    {
-        "release": "dev",
-        "prod": {
-            "hazusInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/hazus/master/hazus/__init__.py",
-            "repoZipfileUrl": "https://github.com/nhrap-hazus/export/archive/master.zip",
-            "toolInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/export/master/__init__.py"
-        },
-        "dev": {
-            "hazusInitUrl": "https://raw.githubusercontent.com/nhrap-dev/hazus/master/hazus/__init__.py",
-            "repoZipfileUrl": "https://github.com/nhrap-dev/export/archive/master.zip",
-            "toolInitUrl": "https://raw.githubusercontent.com/nhrap-dev/export/master/__init__.py"
-        },
-        "proxies": {
-            "fema": "http://proxy.apps.dhs.gov:80"
-        }
-    }
+1. Create a src directory in the root of your app.
+2. Create a config.json file in the src directory with the following code:
 
-    ```
+   ```
+   {
+       "release": "dev",
+       "prod": {
+           "hazusInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/hazus/master/hazus/__init__.py",
+           "repoZipfileUrl": "https://github.com/nhrap-hazus/export/archive/master.zip",
+           "toolInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/export/master/__init__.py"
+       },
+       "dev": {
+           "hazusInitUrl": "https://raw.githubusercontent.com/nhrap-dev/hazus/master/hazus/__init__.py",
+           "repoZipfileUrl": "https://github.com/nhrap-dev/export/archive/master.zip",
+           "toolInitUrl": "https://raw.githubusercontent.com/nhrap-dev/export/master/__init__.py"
+       },
+       "proxies": {
+           "fema": "http://proxy.apps.dhs.gov:80"
+       }
+   }
 
-4.  Replace the URLs with the URLs for your tool:
+   ```
 
-    - **release:** This alternates between the URLs for prod and dev. Update to prod for production.
-    - **hazusInitUrl:** This can stay the same. It's the raw URL to the `__init__.py` file in the hazus python package root.
-    - **repoZipfileUrl:** This is the URL to the zipfile download for your tool. You can access this URL by going to your repo, clicking on Clone or Download, and then right clicking on Download Zip and copying the URL.
-    - **toolInitUrl:** This is the URL to the `__init__.py` file in the root of your tool. You can access it by clicking on your `__init__.py` file, then clicking Raw at the top of your code.
+3. Replace the URLs with the URLs for your tool:
 
-5.  Create an `__init__.py` file in the src folder, so that the manage submodule can be seen by your app. Put this code inside of it:
+   - **release:** This alternates between the URLs for prod and dev. Update to prod for production.
+   - **hazusInitUrl:** This can stay the same. It's the raw URL to the `__init__.py` file in the hazus python package root.
+   - **repoZipfileUrl:** This is the URL to the zipfile download for your tool. You can access this URL by going to your repo, clicking on Clone or Download, and then right clicking on Download Zip and copying the URL.
+   - **toolInitUrl:** This is the URL to the `__init__.py` file in the root of your tool. You can access it by clicking on your `__init__.py` file, then clicking Raw at the top of your code.
 
-    ```
-    __version__ = '0.0.1'
-    __all__ = ['manage']
+### GitHub Action for manage.py
 
-    from .manage import manage
-    ```
+1. Create this file and directory structure in the root of your app: `.github/workflows/main.yml`
+2. Enter the following code in the `main.yml` file. You can replace the user email and name if needed. The rest should be the same.
 
-6.  Update your run.py file that is called by the .bat entry point:
+   ```
+   name: CI
 
-    If your GUI is in the src folder, you can call
+   on: [push]
 
-    ```
-    from manage.manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
-    if internetConnected():
-        checkForHazusUpdates()
-        checkForToolUpdates()
-    ```
+   jobs:
+   build:
+       runs-on: ubuntu-latest
 
-    If your GUI is in "Example_Folder", you can call
+       steps:
+       - uses: actions/checkout@v2
+       - name: Update manage.py
+           run: |
+           git config --global user.email "jraines521@gmail.com"
+           git config --global user.name "lorax521"
+           git clone https://github.com/nhrap-dev/manage.git
+           cp ./manage/manage.py ./src/manage.py
+           rm -rf manage
+           git add .
+           git commit -m "update manage.py"
+           git push
 
-    ```
-    from Example_Folder.manage.manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
-    if internetConnected():
-        checkForHazusUpdates()
-        checkForToolUpdates()
-    ```
+   ```
+
+### Add the manage.py actions to your app
+
+1. Create a run.py file in the same directory as your GUI.
+2. Paste the following code in your run.py
+
+   ```
+    try:
+        from manage.manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
+        if internetConnected():
+            checkForHazusUpdates()
+            checkForToolUpdates()
+
+        from subprocess import check_call
+        try:
+            check_call('conda activate hazus_env && python .\src\__main__.pyw', shell=True)
+        except:
+            check_call('activate hazus_env && python .\src\__main__.pyw', shell=True)
+    except:
+        import ctypes
+        messageBox = ctypes.windll.user32.MessageBoxW
+        messageBox(0,"The tool was unable to open. You need internet connection for this tool to update. If this problem persists, contact hazus-support@riskmapcds.com","Hazus", 0x1000)
+   ```
+
+3. In the run.py file, change `.\src\__main__.pyw` to the file that runs your GUI.
+4. Create a `.bat` file in your root that calls the run.py file. Enter this code in your `.bat` file:
+
+   ```
+   conda activate hazus_env & start /min python src\run.py && exit
+   ```
 
 Happying hacking!
