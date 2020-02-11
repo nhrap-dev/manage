@@ -20,7 +20,7 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    └── src/
    ```
 
-2. Create a config.json file in the src directory with the following code. For production, change the `"release": "dev"` to `"release": "prod".
+2. Create a config.json file in the src directory with the following code. For production, change the `"release": "dev"` to `"release": "prod"`.
 
    ```
    {
