@@ -2,6 +2,16 @@
 
 `manage.py` handles all the updates for HazPy and the GUI for all the tools! Pretty cool hunh?
 
+## How does it work?
+
+### For the user
+
+When the user opens the tool, manage.py will look to see if any new verison of the tool or HazPy exists on GitHub. If they do, it will automatically download and install them for the user.
+
+### For the developer
+
+manage.py is updated centrally from the manage repository. When a `git push` command is made, it fires a Github Action that updates the manage.py in the tool to the latest manage.py script in the manage repo. Following a `git push`, it will take about 30 seconds for the manage.py to update. Then you will need to run `git pull` and it will pull the newest manage.py into your tool.
+
 ## To use
 
 This contains setup instructions for developing open-source tools ontop of HazPy, using manage.py
