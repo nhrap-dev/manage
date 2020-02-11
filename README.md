@@ -55,10 +55,10 @@ This contains setup instructions for developing open-source tools ontop of HazPy
 
 3. Replace the URLs with the URLs for your tool:
 
-   - **release:** This alternates between the URLs for prod and dev. Update to prod for production.
-   - **hazusInitUrl:** This can stay the same. It's the raw URL to the `__init__.py` file in the hazus python package root.
-   - **repoZipfileUrl:** This is the URL to the zipfile download for your tool. You can access this URL by going to your repo, clicking on Clone or Download, and then right clicking on Download Zip and copying the URL.
-   - **toolInitUrl:** This is the URL to the `__init__.py` file in the root of your tool. You can access it by clicking on your `__init__.py` file, then clicking Raw at the top of your code.
+   - **release:** _Alternate_ — This specifies which URL links manage.py looks at.
+   - **hazusInitUrl:** _Don't change_ — It's the raw URL to the `__init__.py` file in the hazus python package root. It updates the users HazPy installation when the version changes in the `__init__.py`.
+   - **repoZipfileUrl:** _Change_ — This is the URL to the zipfile download for your tool. manage.py uses this to auto-download your tool updates. You can access this URL on GitHub by going to your repo, clicking on Clone or Download, and then right clicking on Download Zip and copying the URL.
+   - **toolInitUrl:** _Change_ — This is the URL to the `__init__.py` file in the root of your tool on GitHub. When the version is updated in this file, manage.py prompts the user to update the tool. You can access the URL on GitHub by clicking on your `__init__.py` file, then clicking Raw at the top of your code.
 
 ### 2. GitHub Action for manage.py
 
