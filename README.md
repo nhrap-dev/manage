@@ -4,7 +4,7 @@
 
 ## To use
 
-### src directory and config
+### 1. src directory and config
 
 1. Create a src directory in the root of your app.
 2. Create a config.json file in the src directory with the following code:
@@ -36,7 +36,7 @@
    - **repoZipfileUrl:** This is the URL to the zipfile download for your tool. You can access this URL by going to your repo, clicking on Clone or Download, and then right clicking on Download Zip and copying the URL.
    - **toolInitUrl:** This is the URL to the `__init__.py` file in the root of your tool. You can access it by clicking on your `__init__.py` file, then clicking Raw at the top of your code.
 
-### GitHub Action for manage.py
+### 2. GitHub Action for manage.py
 
 1. Create this file and directory structure in the root of your app: `.github/workflows/main.yml`
 2. Enter the following code in the `main.yml` file. You can replace the user email and name if needed. The rest should be the same.
@@ -65,7 +65,7 @@
 
    ```
 
-### Add the manage.py actions to your app
+### 3. Add the manage.py actions to your app
 
 1. Create a run.py file in the same directory as your GUI.
 2. Paste the following code in your run.py
