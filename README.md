@@ -80,28 +80,28 @@ This contains setup instructions for developing open-source tools ontop of HazPy
 
 2. Enter the following code in the `main.yml` file. You can replace the user email and name if needed. For production, you will change `git clone https://github.com/nhrap-dev/manage.git` to `git clone https://github.com/nhrap-hazus/manage.git`
 
-   ```
-    name: CI
+```
+name: CI
 
-    on: [push]
+on: [push]
 
-    jobs:
-    build:
-        runs-on: ubuntu-latest
+jobs:
+build:
+  runs-on: ubuntu-latest
 
-        steps:
-        - uses: actions/checkout@v2
-        - name: update manage.py
-            run: |
-            git config --global user.email "jraines521@gmail.com"
-            git config --global user.name "lorax521"
-            git clone https://github.com/nhrap-dev/manage.git
-            cp ./manage/manage.py ./src/manage.py
-            rm -rf manage
-            git add .
-            git commit -m "update manage.py"
-            git push
-   ```
+  steps:
+  - uses: actions/checkout@v2
+  - name: update manage.py
+    run: |
+      git config --global user.email "jraines521@gmail.com"
+      git config --global user.name "lorax521"
+      git clone https://github.com/nhrap-dev/manage.git
+      cp ./manage/manage.py ./src/manage.py
+      rm -rf manage
+      git add .
+      git commit -m "update manage.py"
+      git push
+```
 
 ```
 
