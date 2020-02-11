@@ -10,48 +10,48 @@ This contains setup instructions for developing open-source tools ontop of HazPy
 
 1. Create a src directory in the root of your app.
 
-   Diagram
+Diagram
 
-   ```
-   root/
-   ├── .gitignore
-   ├── LICENSE
-   ├── README.md
-   └── src/
-   ```
+```
+root/
+├── .gitignore
+├── LICENSE
+├── README.md
+└── src/
+```
 
 2. Create a config.json file in the src directory with the following code. For production, change the `"release": "dev"` to `"release": "prod"`.
 
-   ```
-   {
-       "release": "dev",
-       "prod": {
-           "hazusInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/hazus/master/hazus/__init__.py",
-           "repoZipfileUrl": "https://github.com/nhrap-hazus/export/archive/master.zip",
-           "toolInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/export/master/__init__.py"
-       },
-       "dev": {
-           "hazusInitUrl": "https://raw.githubusercontent.com/nhrap-dev/hazus/master/hazus/__init__.py",
-           "repoZipfileUrl": "https://github.com/nhrap-dev/export/archive/master.zip",
-           "toolInitUrl": "https://raw.githubusercontent.com/nhrap-dev/export/master/__init__.py"
-       },
-       "proxies": {
-           "fema": "http://proxy.apps.dhs.gov:80"
-       }
-   }
+```
+{
+    "release": "dev",
+    "prod": {
+        "hazusInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/hazus/master/hazus/__init__.py",
+        "repoZipfileUrl": "https://github.com/nhrap-hazus/export/archive/master.zip",
+        "toolInitUrl": "https://raw.githubusercontent.com/nhrap-hazus/export/master/__init__.py"
+    },
+    "dev": {
+        "hazusInitUrl": "https://raw.githubusercontent.com/nhrap-dev/hazus/master/hazus/__init__.py",
+        "repoZipfileUrl": "https://github.com/nhrap-dev/export/archive/master.zip",
+        "toolInitUrl": "https://raw.githubusercontent.com/nhrap-dev/export/master/__init__.py"
+    },
+    "proxies": {
+        "fema": "http://proxy.apps.dhs.gov:80"
+    }
+}
 
-   ```
+```
 
-   Diagram
+Diagram
 
-   ```
-   root/
-   ├── .gitignore
-   ├── LICENSE
-   ├── README.md
-   └── src/
-       ├── config.json
-   ```
+```
+root/
+├── .gitignore
+├── LICENSE
+├── README.md
+└── src/
+    ├── config.json
+```
 
 3. Replace the URLs with the URLs for your tool:
 
@@ -64,19 +64,19 @@ This contains setup instructions for developing open-source tools ontop of HazPy
 
 1. Create a `main.yml` file in this directory structure at the root of your app: `.github/workflows/main.yml`
 
-   Diagram
+Diagram
 
-   ```
-   root/
-   ├── .github/
-   │    ├── workflows/
-   │       ├── main.yml
-   ├── .gitignore
-   ├── LICENSE
-   ├── README.md
-   └── src/
-       ├── config.json
-   ```
+```
+root/
+├── .github/
+│    ├── workflows/
+│       ├── main.yml
+├── .gitignore
+├── LICENSE
+├── README.md
+└── src/
+    ├── config.json
+```
 
 2. Enter the following code in the `main.yml` file. You can replace the user email and name if needed. For production, you will change `git clone https://github.com/nhrap-dev/manage.git` to `git clone https://github.com/nhrap-hazus/manage.git`
 
@@ -101,8 +101,6 @@ build:
       git add .
       git commit -m "update manage.py"
       git push
-```
-
 ```
 
 ### 3. Add the manage.py actions to your app
@@ -131,21 +129,21 @@ root/
 
 ```
 
-    try:
-        from manage.manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
-        if internetConnected():
-            checkForHazusUpdates()
-            checkForToolUpdates()
+try:
+    from manage.manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
+    if internetConnected():
+        checkForHazusUpdates()
+        checkForToolUpdates()
 
-        from subprocess import check_call
-        try:
-            check_call('conda activate hazus_env && python .\src\GUI.py', shell=True)
-        except:
-            check_call('activate hazus_env && python .\src\GUI.py', shell=True)
+    from subprocess import check_call
+    try:
+        check_call('conda activate hazus_env && python .\src\GUI.py', shell=True)
     except:
-        import ctypes
-        messageBox = ctypes.windll.user32.MessageBoxW
-        messageBox(0,"The tool was unable to open. You need internet connection for this tool to update. If this problem persists, contact hazus-support@riskmapcds.com","Hazus", 0x1000)
+        check_call('activate hazus_env && python .\src\GUI.py', shell=True)
+except:
+    import ctypes
+    messageBox = ctypes.windll.user32.MessageBoxW
+    messageBox(0,"The tool was unable to open. You need internet connection for this tool to update. If this problem persists, contact hazus-support@riskmapcds.com","Hazus", 0x1000)
 
 ```
 
@@ -171,12 +169,9 @@ root/
 4. Enter this code in your `.bat` file:
 
 ```
-
 conda activate hazus_env & start /min python src\run.py && exit
-
 ```
 
 Your tool should now open with the `.bat` file and perform checks for tool and HazPy updates on open. Congrats, you just made a HazPy open-source tool!
 
 Happying hacking!
-```
