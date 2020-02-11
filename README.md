@@ -10,7 +10,11 @@ When the user opens the tool, manage.py will look to see if any new verison of t
 
 ### For the developer
 
-manage.py is updated centrally from the manage repository. When a `git push` command is made, it fires a Github Action that updates the manage.py in the tool to the latest manage.py script in the manage repo. Following a `git push`, it will take about 30 seconds for the manage.py to update. Then you will need to run `git pull` and it will pull the newest manage.py into your tool.
+**Workflow**
+
+1. Update the manage.py script in the manage repository. manage.py can only be updated here.
+2. In your tool, run `git push`. This fire the GitHub Action to update the manage.py script in your tool.
+3. Wait about 30 seconds, then run `git pull`. This should pull the updated manage.py into your tool.
 
 ## To use
 
