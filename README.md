@@ -212,6 +212,8 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    └── src/
        ├── __init__.py
        ├── config.json
+       ├── GUI.py
+       └── run.py
 
    ```
 
