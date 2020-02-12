@@ -64,7 +64,7 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    ├── LICENSE
    ├── README.md
    └── src/
-       ├── config.json
+        └──config.json
    ```
 
 3. Replace the URLs with the URLs for your tool:
@@ -74,6 +74,39 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    - **repoZipfileUrl:** _Change_ — This is the URL to the zipfile download for your tool. manage.py uses this to auto-download your tool updates. You can access this URL on GitHub by going to your repo, clicking on Clone or Download, and then right clicking on Download Zip and copying the URL.
    - **toolInitUrl:** _Change_ — This is the URL to the `__init__.py` file in the root of your tool on GitHub. When the version is updated in this file, manage.py prompts the user to update the tool. You can access the URL on GitHub by clicking on your `__init__.py` file, then clicking Raw at the top of your code.
 
+4. Create an `__init__.py` file in the src directory with the following code, updating the author. When you update the version here, it will prompt the user to update their tool and download the latest from GitHub:
+
+   ```
+    # -*- coding: utf-8 -*-
+    """
+        hazus
+        ~~~~~
+
+        FEMA developed module for analzying risk and loss from natural hazards.
+
+        :copyright: © 2019 by FEMA's Natural Hazards and Risk Assesment Program.
+        :license: cc, see LICENSE for more details.
+        :author: <firstName lastName>; <first.last@fema.dhs.gov>
+    """
+
+    __version__ = '0.0.1'
+    __all__ = ['']
+   ```
+
+   Diagram
+
+   ```
+
+   root/
+   ├── .gitignore
+   ├── LICENSE
+   ├── README.md
+   └── src/
+       ├── __init__.py
+       └── config.json
+
+   ```
+
 ### 2. GitHub Action for manage.py
 
 1. Create a `main.yml` file in this directory structure at the root of your app: `.github/workflows/main.yml`
@@ -81,20 +114,24 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    Diagram
 
    ```
+
    root/
    ├── .github/
-   │    ├── workflows/
-   │       ├── main.yml
+   │    └── workflows/
+   │        └── main.yml
    ├── .gitignore
    ├── LICENSE
    ├── README.md
    └── src/
-       ├── config.json
+       ├── __init__.py
+       └── config.json
+
    ```
 
 2. Enter the following code in the `main.yml` file. You can replace the user email and name if needed. For production, you will change `git clone https://github.com/nhrap-dev/manage.git` to `git clone https://github.com/nhrap-hazus/manage.git`
 
    ```
+
    name: CI
 
    on: [push]
@@ -104,17 +141,19 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    runs-on: ubuntu-latest
 
    steps:
+
    - uses: actions/checkout@v2
    - name: update manage.py
-     run: |
-       git config --global user.email "jraines521@gmail.com"
-       git config --global user.name "lorax521"
-       git clone https://github.com/nhrap-dev/manage.git
-       cp ./manage/manage.py ./src/manage.py
-       rm -rf manage
-       git add .
-       git commit -m "update manage.py"
-       git push
+   run: |
+   git config --global user.email "jraines521@gmail.com"
+   git config --global user.name "lorax521"
+   git clone https://github.com/nhrap-dev/manage.git
+   cp ./manage/manage.py ./src/manage.py
+   rm -rf manage
+   git add .
+   git commit -m "update manage.py"
+   git push
+
    ```
 
 ### 3. Add the manage.py actions to your app
@@ -127,15 +166,16 @@ This contains setup instructions for developing open-source tools ontop of HazPy
 
    root/
    ├── .github/
-   │ ├── workflows/
-   │ ├── main.yml
+   │    └── workflows/
+   │        └── main.yml
    ├── .gitignore
    ├── LICENSE
    ├── README.md
    └── src/
-   ├── config.json
-   ├── GUI.py
-   ├── run.py
+       ├── __init__.py
+       ├── config.json
+       ├── GUI.py
+       └── run.py
 
    ```
 
@@ -144,20 +184,21 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    ```
 
    try:
-       from manage.manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
-       if internetConnected():
-           checkForHazusUpdates()
-           checkForToolUpdates()
+   from manage.manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
+   if internetConnected():
+   checkForHazusUpdates()
+   checkForToolUpdates()
 
        from subprocess import check_call
        try:
            check_call('conda activate hazus_env && python .\src\GUI.py', shell=True)
        except:
            check_call('activate hazus_env && python .\src\GUI.py', shell=True)
+
    except:
-       import ctypes
-       messageBox = ctypes.windll.user32.MessageBoxW
-       messageBox(0,"The tool was unable to open. You need internet connection for this tool to update. If this problem persists, contact hazus-support@riskmapcds.com","Hazus", 0x1000)
+   import ctypes
+   messageBox = ctypes.windll.user32.MessageBoxW
+   messageBox(0,"The tool was unable to open. You need internet connection for this tool to update. If this problem persists, contact hazus-support@riskmapcds.com","Hazus", 0x1000)
 
    ```
 
@@ -169,21 +210,22 @@ This contains setup instructions for developing open-source tools ontop of HazPy
 
    root/
    ├── .github/
-   │ ├── workflows/
-   │ ├── main.yml
+   │    └── workflows/
+   │        └── main.yml
    ├── .gitignore
    ├── earthquake-tool.bat
    ├── LICENSE
    ├── README.md
    └── src/
-   ├── config.json
+       ├── __init__.py
+       ├── config.json
 
    ```
 
 4. Enter this code in your `.bat` file:
 
    ```
-   conda activate hazus_env & start /min python src\run.py && exit
+   CALL conda.bat activate hazus_env & start /min python src\run.py
    ```
 
 Your tool should now open with the `.bat` file and perform checks for tool and HazPy updates on open. Congrats, you just made a HazPy open-source tool!
