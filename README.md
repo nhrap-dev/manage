@@ -223,7 +223,7 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    CALL conda.bat activate hazus_env & start /min python src\run.py
    ```
 
-Your tool should now open with the `.bat` file and perform checks for tool and HazPy updates on open. Everytime you perform a `git push`, it will update the manage.py file adding it here:
+Your tool should now open with the `.bat` file and perform checks for tool and HazPy updates on open. Everytime you perform a `git push`, it will update the manage.py file adding it to the directory below. Make sure to perform a `git pull` so it will pull that manage.py file down locally.
 
 Diagram
 
