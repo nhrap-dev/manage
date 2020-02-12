@@ -13,7 +13,7 @@ When the user opens the tool, manage.py will look to see if any new verison of t
 **Workflow**
 
 1. Update the manage.py script in the manage repository. manage.py can only be updated here.
-2. In your tool, run `git push`. This fire the GitHub Action to update the manage.py script in your tool.
+2. In your tool, run `git push`. This fires the GitHub Action to update the manage.py script in your tool.
 3. Wait about 30 seconds, then run `git pull`. This should pull the updated manage.py into your tool.
 
 ## To use
@@ -64,7 +64,7 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    ├── LICENSE
    ├── README.md
    └── src/
-        └──config.json
+       └──config.json
    ```
 
 3. Replace the URLs with the URLs for your tool:
@@ -79,7 +79,7 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    ```
     # -*- coding: utf-8 -*-
     """
-        hazus
+        Hazus Open-Source Tool
         ~~~~~
 
         FEMA developed module for analzying risk and loss from natural hazards.
@@ -131,29 +131,26 @@ This contains setup instructions for developing open-source tools ontop of HazPy
 2. Enter the following code in the `main.yml` file. You can replace the user email and name if needed. For production, you will change `git clone https://github.com/nhrap-dev/manage.git` to `git clone https://github.com/nhrap-hazus/manage.git`
 
    ```
-
    name: CI
 
    on: [push]
 
    jobs:
-   build:
-   runs-on: ubuntu-latest
+     build:
+       runs-on: ubuntu-latest
 
-   steps:
-
-   - uses: actions/checkout@v2
-   - name: update manage.py
-   run: |
-   git config --global user.email "jraines521@gmail.com"
-   git config --global user.name "lorax521"
-   git clone https://github.com/nhrap-dev/manage.git
-   cp ./manage/manage.py ./src/manage.py
-   rm -rf manage
-   git add .
-   git commit -m "update manage.py"
-   git push
-
+       steps:
+       - uses: actions/checkout@v2
+       - name: update manage.py
+         run: |
+           git config --global user.email "jraines521@gmail.com"
+           git config --global user.name "lorax521"
+           git clone https://github.com/nhrap-dev/manage.git
+           cp ./manage/manage.py ./src/manage.py
+           rm -rf manage
+           git add .
+           git commit -m "update manage.py"
+           git push
    ```
 
 ### 3. Add the manage.py actions to your app
@@ -182,23 +179,19 @@ This contains setup instructions for developing open-source tools ontop of HazPy
 2. Paste the following code in your run.py
 
    ```
-
    try:
-   from manage.manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
-   if internetConnected():
-   checkForHazusUpdates()
-   checkForToolUpdates()
+       from manage import internetConnected, checkForHazusUpdates, checkForToolUpdates
+       if internetConnected():
+           checkForHazusUpdates()
+           checkForToolUpdates()
 
        from subprocess import check_call
-       try:
-           check_call('conda activate hazus_env && python .\src\GUI.py', shell=True)
-       except:
-           check_call('activate hazus_env && python .\src\GUI.py', shell=True)
+       check_call('CALL conda.bat activate hazus_env && python .\src\GUI.py', shell=True)
 
    except:
-   import ctypes
-   messageBox = ctypes.windll.user32.MessageBoxW
-   messageBox(0,"The tool was unable to open. You need internet connection for this tool to update. If this problem persists, contact hazus-support@riskmapcds.com","Hazus", 0x1000)
+       import ctypes
+       messageBox = ctypes.windll.user32.MessageBoxW
+       messageBox(0,"The tool was unable to open. You need internet connection for this tool to update. If this problem persists, contact hazus-support@riskmapcds.com","Hazus", 0x1000)
 
    ```
 
