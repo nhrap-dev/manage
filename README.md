@@ -223,6 +223,28 @@ This contains setup instructions for developing open-source tools ontop of HazPy
    CALL conda.bat activate hazus_env & start /min python src\run.py
    ```
 
-Your tool should now open with the `.bat` file and perform checks for tool and HazPy updates on open. Congrats, you just made a HazPy open-source tool!
+Your tool should now open with the `.bat` file and perform checks for tool and HazPy updates on open. Everytime you perform a `git push`, it will update the manage.py file adding it here:
 
-Happying hacking!
+Diagram
+
+```
+
+root/
+├── .github/
+│    └── workflows/
+│        └── main.yml
+├── .gitignore
+├── earthquake-tool.bat
+├── LICENSE
+├── README.md
+└── src/
+    ├── __init__.py
+    ├── config.json
+    ├── GUI.py
+    ├── manage.py
+    └── run.py
+
+```
+
+Congrats, you just made a HazPy open-source tool!
+Happying hacking
