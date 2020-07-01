@@ -63,22 +63,26 @@ def condaInstallHazPy():
         try:
             check_call('CALL conda.bat activate ' + conda_env, shell=True)
         except:
-            print('Creating the conda ' + conda_env)
-            handleProxy()
-            call('echo y | conda create -y -n ' + conda_env, shell=True)
+            try:
+                print('Creating the conda ' + conda_env)
+                handleProxy()
+                call('echo y | conda create -y -n ' + conda_env, shell=True)
+            except:
+                call('conda deactivate && conda env remove -n ' +
+                     conda_env, shell=True)
 
         print('Installing ' + python_package)
         handleProxy()
         try:
             check_call('CALL conda.bat activate ' + conda_env +
-                       ' && echo y | conda install ' + python_package + '-f', shell=True)
+                       ' && echo y | conda install ' + python_package + ' -f', shell=True)
         except:
             call('echo y | conda create -y -n ' + conda_env, shell=True)
             check_call('CALL conda.bat activate ' + conda_env +
-                       ' && echo y | conda install ' + python_package + '-f', shell=True)
+                       ' && echo y | conda install ' + python_package + ' -f', shell=True)
 
         messageBox(0, u'The ' + python_package +
-                   u" python package was successfully installed! The update will take effect the next time the tool is opened.", u"HazPy", 0x1000)
+                   u" python package was successfully installed! The update will take effect when the tool is reopened.", u"HazPy", 0x1000)
     except:
         messageBox(0, u'Unable to install ' + python_package +
                    u'. If this error persists, contact hazus-support@riskmapcds.com for assistance.', u"HazPy", 0x1000)
@@ -88,32 +92,32 @@ def createHazPyEnvironment():
 
     returnValue = messageBox(None, u'The ' + python_package +
                              u" python package is required to run this tool. Would you like to install it now?", u"HazPy", 0x1000 | 0x4)
-    if returnValue == 6:
-        output = check_output('conda config --show channels')
-        channels = list(map(lambda x: x.strip(), str(
-            output).replace('\\r\\n', '').split('-')))[1:]
-        if not 'anaconda' in channels:
-            call('conda config --add channels anaconda')
-            print('anaconda channel added')
-        if not 'conda' in channels and not 'forge' in channels:
-            call('conda config --add channels conda-forge')
-            print('conda-forge channel added')
-        if not 'nsls2forge' in channels and not 'forge' in channels:
-            call('conda config --add channels nsls2forge')
-            print('nsls2forge channel added')
-        if not conda_channel in channels:
-            call('conda config --add channels ' + conda_channel)
-            print(conda_channel + ' channel added')
-        ctypes.windll.user32.ShowWindow(
-            ctypes.windll.kernel32.GetConsoleWindow(), 1)
-        print("Installing " + python_package +
-              " - hold your horses, this could take a few minutes... but it's totally worth it")
-        try:
+    try:
+        if returnValue == 6:
+            output = check_output('conda config --show channels')
+            channels = list(map(lambda x: x.strip(), str(
+                output).replace('\\r\\n', '').split('-')))[1:]
+            if not 'anaconda' in channels:
+                call('conda config --add channels anaconda')
+                print('anaconda channel added')
+            if not 'conda' in channels and not 'forge' in channels:
+                call('conda config --add channels conda-forge')
+                print('conda-forge channel added')
+            if not 'nsls2forge' in channels and not 'forge' in channels:
+                call('conda config --add channels nsls2forge')
+                print('nsls2forge channel added')
+            if not conda_channel in channels:
+                call('conda config --add channels ' + conda_channel)
+                print(conda_channel + ' channel added')
+            ctypes.windll.user32.ShowWindow(
+                ctypes.windll.kernel32.GetConsoleWindow(), 1)
+            print("Installing " + python_package +
+                  " - hold your horses, this could take a few minutes... but it's totally worth it")
             print('Conda is installing ' + python_package)
             condaInstallHazPy()
-        except:
-            messageBox(0, u"An error occured. " + python_package +
-                       u" was not installed. Please check your network settings and try again.", u"HazPy", 0x1000)
+    except:
+        messageBox(0, u"An error occured. " + python_package +
+                   u" was not installed. Please check your network settings and try again.", u"HazPy", 0x1000)
 
 
 def checkForHazPyUpdates():
@@ -185,7 +189,7 @@ def updateTool():
         copy_tree(fromDirectory, toDirectory)
         rmtree(fromDirectory)
         messageBox(
-            0, u'The tool was successfully updated! I hope that was quick enough for you. The update will take effect the next time the tool is opened.', u"HazPy", 0x1000)
+            0, u'The tool was successfully updated! I hope that was quick enough for you. The update will take effect when the tool is reopened.', u"HazPy", 0x1000)
     except:
         messageBox(
             0, u'The tool update failed. If this error persists, contact hazus-support@riskmapcds.com for assistance.', u"HazPy", 0x1000)
