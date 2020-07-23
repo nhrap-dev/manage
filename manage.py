@@ -11,9 +11,11 @@ import socket
 try:
     with open('./src/config.json') as configFile:
         config = json.load(configFile)
+        tool_version_local = './src/__init__.py'
 except:
     with open('./config.json') as configFile:
         config = json.load(configFile)
+        tool_version_local = './__init__.py'
 
 # environmental variables
 release = config['release']
@@ -21,8 +23,12 @@ proxy = config['proxies']['fema']
 hazpy_version_url = config[release]['hazpyInitUrl']
 tool_version_url = config[release]['toolInitUrl']
 tool_zipfile_url = config[release]['repoZipfileUrl']
-tool_version_local = './src/__init__.py'
-conda_env = 'hazpy_env'
+# TODO remove try/except when config updated across tools
+try:
+    conda_env = config['virtualEnvironment']
+except:
+    conda_env = 'hazus_env'
+# TODO add conda_channel to config rather than release
 if release == 'prod':
     conda_channel = 'nhrap'
 if release == 'dev':
