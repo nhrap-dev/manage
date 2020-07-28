@@ -18,25 +18,16 @@ except:
         tool_version_local = './__init__.py'
 
 # environmental variables
-release = config['release']
 proxy = config['proxies']['fema']
-hazpy_version_url = config[release]['hazpyInitUrl']
-tool_version_url = config[release]['toolInitUrl']
-tool_zipfile_url = config[release]['repoZipfileUrl']
-# TODO remove try/except when config updated across tools
-try:
-    conda_env = config['virtualEnvironment']
-except:
-    conda_env = 'hazus_env'
-# TODO add conda_channel to config rather than release
-if release == 'prod':
-    conda_channel = 'nhrap'
-if release == 'dev':
-    conda_channel = 'nhrap-dev'
-python_package = 'hazpy'
-httpTimeout = 2  # in seconds
+hazpy_version_url = config['hazpyInitUrl']
+tool_version_url = config['toolInitUrl']
+tool_zipfile_url = config['repoZipfileUrl']
+conda_channel = config['condaChannel']
+python_package = config['pythonPackage']
+http_timeout = config['httpTimeout']  # in seconds
+
+# init message dialog box
 messageBox = ctypes.windll.user32.MessageBoxW
-# ctypes.set_conversion_mode('utf-8', 'strict')
 
 
 def createProxyEnv():
@@ -133,7 +124,7 @@ def checkForHazPyUpdates():
             python_package).version
 
         handleProxy()
-        req = requests.get(hazpy_version_url, timeout=httpTimeout)
+        req = requests.get(hazpy_version_url, timeout=http_timeout)
 
         newestVersion = parseVersionFromInit(req.text)
         if newestVersion != installedVersion:
@@ -160,7 +151,7 @@ def checkForToolUpdates():
             installedVersion = parseVersionFromInit(textBlob)
 
         handleProxy()
-        req = requests.get(tool_version_url, timeout=httpTimeout)
+        req = requests.get(tool_version_url, timeout=http_timeout)
 
         newestVersion = parseVersionFromInit(req.text)
         if newestVersion != installedVersion:
@@ -221,7 +212,7 @@ def internetConnected():
 
 def handleProxy():
     try:
-        socket.setdefaulttimeout(httpTimeout)
+        socket.setdefaulttimeout(http_timeout)
         port = 80
         try:
             # try without the proxy
