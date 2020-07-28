@@ -19,12 +19,13 @@ except:
 
 # environmental variables
 proxy = config['proxies']['fema']
-hazpy_version_url = config['hazpyInitUrl']
-tool_version_url = config['toolInitUrl']
-tool_zipfile_url = config['repoZipfileUrl']
-conda_channel = config['condaChannel']
-python_package = config['pythonPackage']
-http_timeout = config['httpTimeout']  # in seconds
+release = config['release']
+hazpy_version_url = release['hazpyInitUrl']
+tool_version_url = release['toolInitUrl']
+tool_zipfile_url = release['repoZipfileUrl']
+conda_channel = release['condaChannel']
+python_package = release['pythonPackage']
+http_timeout = release['httpTimeout']  # in seconds
 
 # init message dialog box
 messageBox = ctypes.windll.user32.MessageBoxW
