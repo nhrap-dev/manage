@@ -67,8 +67,7 @@ def condaInstallHazPy():
             try:
                 print('Creating the conda ' + virtual_environment)
                 handleProxy()
-                call('echo y | conda create -y -n {ve} python={pv}'.format(
-                    ve=virtual_environment, pv=python_version), shell=True)
+                call('echo y | conda create -y -n {ve} python={pv}'.format(ve=virtual_environment, pv=python_version), shell=True)
             except:
                 call('conda deactivate && conda env remove -n ' +
                      virtual_environment, shell=True)
@@ -76,13 +75,10 @@ def condaInstallHazPy():
         print('Installing ' + python_package)
         handleProxy()
         try:
-            check_call('CALL conda.bat activate {ve} && echo y | conda install -c {c} {p} --force-reinstall'.format(
-                ve=virtual_environment, c=conda_channel, p=python_package), shell=True)
+            check_call('CALL conda.bat activate {ve} && echo y | conda install -c {c} {p} --force-reinstall'.format(ve=virtual_environment, c=conda_channel, p=python_package), shell=True)
         except:
-            call('echo y | conda create -y -n {ve} python={pv}'.format(
-                ve=virtual_environment, pv=python_version), shell=True)
-            check_call('CALL conda.bat activate {ve} && echo y | conda install -c {c} {p} --force-reinstall'.format(
-                ve=virtual_environment, c=conda_channel, p=python_package), shell=True)
+            call('echo y | conda create -y -n {ve} python={pv}'.format(ve=virtual_environment, pv=python_version), shell=True)
+            check_call('CALL conda.bat activate {ve} && echo y | conda install -c {c} {p} --force-reinstall'.format(ve=virtual_environment, c=conda_channel, p=python_package), shell=True)
 
         messageBox(0, u'The ' + python_package +
                    u" python package was successfully installed! The update will take effect when the tool is reopened.", u"HazPy", 0x1000)
@@ -125,8 +121,7 @@ def createHazPyEnvironment():
 
 def checkForHazPyUpdates():
     try:
-        installedVersion = pkg_resources.get_distribution(
-            python_package).version
+        installedVersion = pkg_resources.get_distribution(python_package).version
         try:
             handleProxy()
             req = requests.get(hazpy_version_url, timeout=http_timeout)
@@ -139,7 +134,7 @@ def checkForHazPyUpdates():
             newestVersion = parseVersionFromInit(req.text)
             if newestVersion != installedVersion:
                 returnValue = messageBox(None, u"A new version of the " + python_package +
-                                         u" python package was found. Would you like to install it now?", u"HazPy", 0x1000 | 0x4)
+                                        u" python package was found. Would you like to install it now?", u"HazPy", 0x1000 | 0x4)
                 if returnValue == 6:
                     messageBox(
                         0, u'Updates are installing. We will let you know when its done!', u"HazPy", 0x1000)
@@ -248,7 +243,6 @@ def handleProxy():
         # 0 indicates there is no internet connection
         # or the method was unable to connect using the hosts and ports
         return -1
-
 
 def removeProxy():
     os.environ['HTTP_PROXY'] = ''
